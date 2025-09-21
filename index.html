@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Assignment - Calculator Hub</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: #4f46e5;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            margin: 0;
+            font-size: 2em;
+            font-weight: 500;
+        }
+        
+        .header p {
+            margin: 8px 0 0 0;
+            opacity: 0.9;
+            font-size: 1em;
+        }
+        
+        .nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 25px;
+            background: #f9fafb;
+        }
+        
+        .nav-button {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .nav-button:hover {
+            background: #5b5bd6;
+            transform: translateY(-1px);
+        }
+        
+        /* Simple Assignment Solutions Styles */
+        .assignment-section {
+            padding: 30px 25px;
+            background: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .solutions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .solution-category {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .solution-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .solution-button {
+            display: block;
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+        
+        .trig-btn {
+            background: #6366f1;
+            color: #ffffff;
+        }
+        
+        .trig-btn:hover {
+            background: #5b5bd6;
+        }
+        
+        .interest-btn {
+            background: #10b981;
+            color: #ffffff;
+        }
+        
+        .interest-btn:hover {
+            background: #059669;
+        }
+        
+        .button-title {
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 6px;
+        }
+        
+        .button-desc {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+        
+        .button-result {
+            font-size: 1em;
+            font-weight: 500;
+            background: rgba(255,255,255,0.2);
+            padding: 6px 10px;
+            border-radius: 4px;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .solutions-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .api-section {
+            padding: 25px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .api-section h2 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        
+        .api-demo {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+        
+        .form-group {
+            margin: 10px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
+        
+        .calculate-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .calculate-btn:hover {
+            background: #059669;
+        }
+        
+        .result {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            border-left: 3px solid #10b981;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+        }
+        
+        .error {
+            background: #fef2f2;
+            color: #dc2626;
+            border-left-color: #dc2626;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 15px;
+            color: #6b7280;
+        }
+        
+        .footer {
+            background: #374151;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Backend Developer Assignment</h1>
+            <p>4 Solved Problems Using Template 1 & Template 2</p>
+        </div>
+        
+        <div class="nav">
+            <a href="interestcompounded.html" class="nav-button">Template 2 - Original</a>
+            <a href="temp1.html" class="nav-button">Template 1 - Original</a>
+        </div>
+        
+        <!-- Assignment Solutions Section -->
+        <div class="assignment-section">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="color: #333; margin-bottom: 10px;">📋 Assignment Deliverables</h2>
+                <p style="color: #666; font-size: 1.1em;">2 Problems using Template 1 + 2 Problems using Template 2</p>
+            </div>
+            
+            <div class="solutions-grid">
+                <div class="solution-category">
+                    <h3 style="color: #667eea; text-align: center; margin-bottom: 20px;">📐 Template 1 - Trigonometry Problems</h3>
+                    <div class="solution-buttons">
+                        <a href="trigonometry_problem1.html" class="solution-button trig-btn">
+                            <div class="button-title">Problem 1</div>
+                            <div class="button-desc">Pythagorean Triplet (9,40,41)</div>
+                            <div class="button-result">Sec C + Cot A = 5/4</div>
+                        </a>
+                        <a href="trigonometry_problem2.html" class="solution-button trig-btn">
+                            <div class="button-title">Problem 2</div>
+                            <div class="button-desc">Pythagorean Triplet (5,12,13)</div>
+                            <div class="button-result">Sec C + Cot A = 3/2</div>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="solution-category">
+                    <h3 style="color: #1bad83; text-align: center; margin-bottom: 20px;">💰 Template 2 - Compound Interest Problems</h3>
+                    <div class="solution-buttons">
+                        <a href="compound_interest_problem1.html" class="solution-button interest-btn">
+                            <div class="button-title">Problem 1</div>
+                            <div class="button-desc">Find Rate: ₹5000 → ₹6050</div>
+                            <div class="button-result">Rate = 10%</div>
+                        </a>
+                        <a href="compound_interest_problem2.html" class="solution-button interest-btn">
+                            <div class="button-title">Problem 2</div>
+                            <div class="button-desc">Find Amount: ₹8000 → ₹10648</div>
+                            <div class="button-result">2-year Amount = ₹9680</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+
+        </div>
+        
+        <div class="api-section">
+            <h2>API Endpoints Demo</h2>
+            
+            <div class="api-demo">
+                <h3>Compound Interest API</h3>
+                <div class="form-group">
+                    <label for="principal">Principal Amount:</label>
+                    <input type="number" id="principal" placeholder="12000" value="12000">
+                </div>
+                <div class="form-group">
+                    <label for="rate">Interest Rate (%):</label>
+                    <input type="number" id="rate" placeholder="20" value="20" step="0.1">
+                </div>
+                <div class="form-group">
+                    <label for="time">Time (years):</label>
+                    <input type="number" id="time" placeholder="3" value="3">
+                </div>
+                <button class="calculate-btn" onclick="calculateCompoundInterest()">Calculate</button>
+                <div id="compoundResult" class="result"></div>
+            </div>
+            
+            <div class="api-demo">
+                <h3>Trigonometry API</h3>
+                <div class="form-group">
+                    <label for="sideA">Side A (cm):</label>
+                    <input type="number" id="sideA" placeholder="7" value="7">
+                </div>
+                <div class="form-group">
+                    <label for="sideB">Side B (cm):</label>
+                    <input type="number" id="sideB" placeholder="24" value="24">
+                </div>
+                <div class="form-group">
+                    <label for="sideC">Side C (cm):</label>
+                    <input type="number" id="sideC" placeholder="25" value="25">
+                </div>
+                <button class="calculate-btn" onclick="calculateTrigonometry()">Calculate</button>
+                <div id="trigResult" class="result"></div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>&copy; 2024 Backend Developer Assignment - 4 Solved Problems Ready for Submission</p>
+        </div>
+    </div>
+
+    <script>
+        async function calculateCompoundInterest() {
+            const principal = document.getElementById('principal').value;
+            const rate = document.getElementById('rate').value;
+            const time = document.getElementById('time').value;
+            const resultDiv = document.getElementById('compoundResult');
+            
+            if (!principal || !rate || !time) {
+                showError(resultDiv, 'Please fill in all fields');
+                return;
+            }
+            
+            showLoading(resultDiv);
+            
+            try {
+                const response = await fetch('/api/compound-interest', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        principal: parseFloat(principal),
+                        rate: parseFloat(rate),
+                        time: parseFloat(time)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showCompoundResult(resultDiv, data);
+                } else {
+                    showError(resultDiv, data.error);
+                }
+            } catch (error) {
+                showError(resultDiv, 'Network error: ' + error.message);
+            }
+        }
+        
+        async function calculateTrigonometry() {
+            const sideA = document.getElementById('sideA').value;
+            const sideB = document.getElementById('sideB').value;
+            const sideC = document.getElementById('sideC').value;
+            const resultDiv = document.getElementById('trigResult');
+            
+            if (!sideA || !sideB || !sideC) {
+                showError(resultDiv, 'Please fill in all sides');
+                return;
+            }
+            
+            showLoading(resultDiv);
+            
+            try {
+                const response = await fetch('/api/trigonometry', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        sideA: parseFloat(sideA),
+                        sideB: parseFloat(sideB),
+                        sideC: parseFloat(sideC)
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showTrigResult(resultDiv, data);
+                } else {
+                    showError(resultDiv, data.error);
+                }
+            } catch (error) {
+                showError(resultDiv, 'Network error: ' + error.message);
+            }
+        }
+        
+        function showLoading(element) {
+            element.className = 'result loading';
+            element.innerHTML = 'Calculating...';
+            element.style.display = 'block';
+        }
+        
+        function showError(element, message) {
+            element.className = 'result error show';
+            element.innerHTML = `<strong>Error:</strong> ${message}`;
+        }
+        
+        function showCompoundResult(element, data) {
+            element.className = 'result show';
+            element.innerHTML = `
+                <h4>Compound Interest Calculation Results</h4>
+                <p><strong>Principal:</strong> ₹${data.principal}</p>
+                <p><strong>Rate:</strong> ${data.rate}% per annum</p>
+                <p><strong>Time:</strong> ${data.time} years</p>
+                <p><strong>Final Amount:</strong> ₹${data.amount}</p>
+                <p><strong>Interest Earned:</strong> ₹${data.interest}</p>
+                <h5>Year-by-Year Breakdown:</h5>
+                <ul>
+                    ${data.steps.map(step => 
+                        `<li>Year ${step.year}: ₹${step.amount} (Interest: ₹${step.interest})</li>`
+                    ).join('')}
+                </ul>
+            `;
+        }
+        
+        function showTrigResult(element, data) {
+            element.className = 'result show';
+            element.innerHTML = `
+                <h4>Trigonometry Calculation Results</h4>
+                <p><strong>Triangle Sides:</strong> ${data.sides.sideA}cm, ${data.sides.sideB}cm, ${data.sides.sideC}cm</p>
+                <p><strong>Hypotenuse:</strong> ${data.triangle.hypotenuse}cm</p>
+                <p><strong>Base:</strong> ${data.triangle.base}cm</p>
+                <p><strong>Perpendicular:</strong> ${data.triangle.perpendicular}cm</p>
+                <p><strong>Sec C:</strong> ${data.calculations.secC}</p>
+                <p><strong>Cot A:</strong> ${data.calculations.cotA}</p>
+                <p><strong>Sec C + Cot A:</strong> ${data.calculations.result}</p>
+            `;
+        }
+    </script>
+</body>
+</html>
